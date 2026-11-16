@@ -1,0 +1,48 @@
+services:
+#============================================#
+  #MONGODB
+#============================================#  
+  mongo-cloud:
+    image: mongo:8.0.8-noble
+    container_name: campuscloud-mongo
+
+    restart: always
+
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+
+    ports:
+      - "${MONGO_PORT}:27017"
+
+    volumes:
+      - mongo_data:/data/db
+
+    networks:
+      - campuscloud_net
+
+    healthcheck:
+      test: 
+        [
+          "CMD", "mongosh", "--eval", "db.adminCommand('ping')"
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+#============================================#
+  #VOLUMEN
+#============================================#  
+volumes:
+  mongo_data:
+   external: true
+   name: ${MONGO_VOLUME}
+
+#============================================#
+  #RED
+#============================================#
+networks:
+  campuscloud_net:
+    external: true
+    name: ${DOCKER_NETWORK}

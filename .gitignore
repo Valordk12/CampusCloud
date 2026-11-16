@@ -1,2 +1,19 @@
+# Variables de entorno 
+
 .env
+.env.*
+!.env.example
+
+# Archivos de registro
 *.log
+
+# Dependencias de Node.js
+node_modules/
+
+# Resultados de pruebas
+coverage/
+
+
+notasgenerales.md
+images_docker/
+echo "images_docker/*.tar" >> .gitignore

@@ -1,0 +1,45 @@
+services:
+  #============================================#
+  # NEO4J
+  #============================================#
+  neo4j-cloud:
+    image: neo4j:5-community
+    container_name: campuscloud-neo4j
+
+    restart: always
+
+    environment:
+      NEO4J_AUTH: ${NEO4J_AUTH}
+
+    ports:
+      - "${NEO4J_PORT1}:7474"
+      - "${NEO4J_PORT2}:7687"
+
+    volumes:
+      - neo4j_data:/data
+
+    networks:
+      - campuscloud_net
+      
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:7474"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 20s
+
+#============================================#
+# VOLUMEN
+#============================================#
+volumes:
+  neo4j_data:
+    external: true
+    name: ${NEO4J_VOLUME}
+
+#============================================#
+# RED
+#============================================#
+networks:
+  campuscloud_net:
+    external: true
+    name: ${DOCKER_NETWORK}

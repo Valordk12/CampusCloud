@@ -1,0 +1,46 @@
+services:
+#============================================#
+  #CASSANDRA
+#============================================#  
+  cassandra-cloud:
+    image: cassandra:5.0
+    container_name: campuscloud-cassandra
+
+    restart: always
+
+    environment:
+      CASSANDRA_CLUSTER_NAME: ${CASSANDRA_CLUSTER_NAME}
+
+    ports:
+      - "${CASSANDRA_PORT}:9042"
+
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+
+    networks:
+      - campuscloud_net
+
+    healthcheck:
+      test: [
+        "CMD", "cqlsh", "-e", "describe cluster"
+        ]
+      interval: 15s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+#============================================#
+  #VOLUMEN
+#============================================#  
+volumes:
+  cassandra_data:
+   external: true
+   name: ${CASSANDRA_VOLUME}
+
+#============================================#
+  #RED
+#============================================#
+networks:
+  campuscloud_net:
+    external: true
+    name: ${DOCKER_NETWORK}
