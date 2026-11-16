@@ -1,8 +1,10 @@
+-- Creación del keyspace
 CREATE KEYSPACE campuscloud_eventos
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 
 USE campuscloud_eventos;
 
+-- Creación de la tabla eventos_estudiante
 CREATE TABLE eventos_estudiante (
 estudiante_id text,
 nombre_Estudiante text,
@@ -15,6 +17,7 @@ PRIMARY KEY ((estudiante_id), fecha_evento, evento_id)
 
 SELECT * FROM eventos_estudiante
 
+-- Inserción de 12 eventos
 INSERT INTO eventos_estudiante (estudiante_id, nombre_estudiante, fecha_evento, evento_id, tipo_evento, detalles) 
 VALUES ('EST-001', 'Peter Parker', '2026-10-01', now(), 'LOGIN', 'Inicio de sesión desde la app móvil');
 
